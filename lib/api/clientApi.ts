@@ -19,28 +19,28 @@ export interface FetchNotesResponse {
 export async function fetchNotes(
   params: FetchNoteParams
 ): Promise<FetchNotesResponse> {
-  const { data } = await internalApi.get<FetchNotesResponse>('', { params });
+  const { data } = await internalApi.get<FetchNotesResponse>('notes', { params });
   return data;
 }
 
 //GET note by id
 
 export async function fetchNoteById(noteId: string): Promise<Note> {
-  const { data } = await internalApi.get<Note>(`/${noteId}`);
+  const { data } = await internalApi.get<Note>(`notes/${noteId}`);
   return data;
 }
 
 //POST create note
 
 export async function createNote(note: CreateNote): Promise<Note> {
-  const { data } = await internalApi.post<Note>('', note);
+  const { data } = await internalApi.post<Note>('notes', note);
   return data;
 }
 
 // DELETE note
 
 export async function deleteNote(noteId: string): Promise<{ id: string }> {
-  const { data } = await internalApi.delete<{ id: string }>(`/${noteId}`);
+  const { data } = await internalApi.delete<{ id: string }>(`notes/${noteId}`);
   return data;
 }
 
