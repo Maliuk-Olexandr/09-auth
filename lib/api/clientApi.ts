@@ -1,0 +1,118 @@
+import type { Note, CreateNote, NoteTag } from '@/types/note';
+import internalApi from './api';
+import type { User, RegisterUser } from '@/types/user';
+
+export interface FetchNotesResponse {
+  totalPages: number;
+  notes: Note[];
+}
+
+ export interface FetchNoteParams {
+  search?: string;
+  page?: number;
+  perPage?: number;
+  tag?: NoteTag;
+}
+
+//GET notes
+
+export async function fetchNotes(
+  params: FetchNoteParams
+): Promise<FetchNotesResponse> {
+  const { data } = await internalApi.get<FetchNotesResponse>('', { params });
+  return data;
+}
+
+//GET note by id
+
+export async function fetchNoteById(noteId: string): Promise<Note> {
+  const { data } = await internalApi.get<Note>(`/${noteId}`);
+  return data;
+}
+
+//POST create note
+
+export async function createNote(note: CreateNote): Promise<Note> {
+  const { data } = await internalApi.post<Note>('', note);
+  return data;
+}
+
+// DELETE note
+
+export async function deleteNote(noteId: string): Promise<{ id: string }> {
+  const { data } = await internalApi.delete<{ id: string }>(`/${noteId}`);
+  return data;
+}
+
+//register user
+
+export async function registerUser(data: RegisterUser): Promise<User | null> {
+  try {
+    const response = await internalApi.post<User>('/auth/register', data);
+    return response.data;
+  } catch (error) {
+    console.error('Registration error:', error);
+    return null;
+  }
+}
+
+// Login user
+
+export async function loginUser(data: RegisterUser): Promise<User | null> {
+  try {
+    const {data : responseData} = await internalApi.post<User>('/auth/login', data, {
+      withCredentials: true,
+    });
+    return responseData;
+  } catch (error) {
+    console.error('Login error:', error);
+    return null;
+  }
+}
+
+// Logout user
+
+export async function logoutUser(): Promise<void> {
+  await internalApi.post('/auth/logout');
+}
+
+// Check user session
+
+type CheckSessionResponse = {
+  success: boolean;
+};
+
+export async function checkSession(): Promise<boolean> {
+  const { data } = await internalApi.get<CheckSessionResponse>('/auth/session');
+  return data.success;
+}
+
+// get current user
+
+export async function getMe(): Promise<User | null> {
+  try {
+    const { data } = await internalApi.get<User>('/auth/me');
+    return data;
+  } catch (error) {
+    console.error('Get me error:', error);
+    return null;
+  }
+}
+
+// update user
+
+export type UpdateUserResponse = {
+  username?: string;
+  email?: string;
+  avatar?: string;
+};
+
+export async function updateMe(data: UpdateUserResponse): Promise<User | null> {
+  try {
+    const { data: responseData } = await internalApi.patch<User>('/auth/me', data);
+    return responseData;
+  } catch (error) {
+    console.error('Update user error:', error);
+    return null;
+  }
+}
