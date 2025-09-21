@@ -1,8 +1,9 @@
 export type User = {
-  name: string;
+  username: string;
   email: string;
-  avatar: string | null;
+  avatar: string;
 };
+
 export type RegisterUser = {
   email: string;
   password: string;
