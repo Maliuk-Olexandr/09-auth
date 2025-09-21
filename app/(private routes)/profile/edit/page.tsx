@@ -25,7 +25,7 @@ export default function EditProfile() {
       setEmail(user.email ?? '');
       setAvatarUrl(user.avatar ?? '');
     });
-  }, []);
+  }, [router]);
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
